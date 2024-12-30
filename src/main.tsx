@@ -3,13 +3,18 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Home from "@/pages/Home";
 import TanstackQueryProvider from "@/providers/tanstackQuery";
+import HomePage from "@/pages/Home";
+import DetailPage from "@/pages/Detail";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <HomePage />,
+  },
+  {
+    path: "/thread/:id",
+    element: <DetailPage />,
   },
 ]);
 

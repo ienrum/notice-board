@@ -2,7 +2,7 @@ import ThreadList from "@/pages/Home/components/ThreadList";
 import ThreadPostFormModal from "@/pages/Home/components/ThreadPostModal";
 import { Suspense } from "react";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div className="p-8">
       <Suspense fallback={<div>Loading...</div>}>
@@ -15,4 +15,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
