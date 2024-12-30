@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "@/pages/Home";
+import TanstackQueryProvider from "@/providers/tanstackQuery";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <TanstackQueryProvider>
+      <RouterProvider router={router} />
+    </TanstackQueryProvider>
   </StrictMode>
 );

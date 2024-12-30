@@ -1,9 +1,12 @@
-import BoardList from "@/pages/Home/components/BoardList";
+import ThreadList from "@/pages/Home/components/ThreadList";
+import { Suspense } from "react";
 
 const Home = () => {
   return (
     <div className="p-8">
-      <BoardList />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThreadList />
+      </Suspense>
     </div>
   );
 };

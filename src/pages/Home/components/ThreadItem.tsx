@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
-interface BaordItemProps {
+interface ThreadItemProps {
   id: number;
   title: string;
   author: string;
 }
 
-const BoardItem = ({ id, title, author }: BaordItemProps) => {
+const ThreadItem = ({ id, title, author }: ThreadItemProps) => {
   return (
     <Link
       className="flex gap-4 bg-slate-100 p-4 text-primary cursor-pointer"
@@ -18,4 +18,4 @@ const BoardItem = ({ id, title, author }: BaordItemProps) => {
   );
 };
 
-export default BoardItem;
+export default ThreadItem;
