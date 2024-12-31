@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axiosInstance";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 interface ThreadItem {
   id: number;
@@ -7,14 +7,20 @@ interface ThreadItem {
   author: string;
 }
 
-const fetchThreadList = () => {
-  return axiosInstance.get<ThreadItem[]>("threads");
+interface ThreadListResponse {
+  data: ThreadItem[];
+  totalPage: number;
+}
+
+const fetchThreadList = (page: number) => {
+  return axiosInstance.get<ThreadListResponse>("threads", { params: { page } });
 };
 
-export const useFetchThreadList = () => {
-  return useSuspenseQuery({
-    queryKey: ["threads"],
-    queryFn: fetchThreadList,
+export const useFetchThreadList = (page: number) => {
+  return useQuery({
+    queryKey: ["threads", page],
+    queryFn: () => fetchThreadList(page),
+    placeholderData: keepPreviousData,
     select: (data) => data.data,
   });
 };
