@@ -4,11 +4,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTrigger,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostThread } from "@/pages/Home/apis/usePostThread";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { FormEvent, useRef, useState } from "react";
 
 interface ThreadPostFormModalProps {
@@ -53,22 +54,16 @@ const ThreadPostFormModal = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>글 작성</DialogTitle>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <label>
-              제목
-              <Input type="text" ref={titleRef} />
-            </label>
-            <label>
-              내용
-              <Textarea className="resize-none" ref={contentRef} />
-            </label>
-            <label>
-              작성자
-              <Input type="text" ref={authorRef} />
-            </label>
-            <Button type="submit">작성</Button>
-          </form>
         </DialogHeader>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
+          <Label htmlFor="title">제목</Label>
+          <Input id="title" type="text" ref={titleRef} />
+          <Label htmlFor="content">내용</Label>
+          <Textarea id="content" className="resize-none" ref={contentRef} />
+          <Label htmlFor="author">작성자</Label>
+          <Input id="author" type="text" ref={authorRef} />
+          <Button type="submit">작성</Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

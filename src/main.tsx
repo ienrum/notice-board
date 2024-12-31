@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import TanstackQueryProvider from "@/providers/tanstackQuery";
 import HomePage from "@/pages/Home";
 import DetailPage from "@/pages/Detail";
+import WritePage from "@/pages/Write";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/thread/:id",
     element: <DetailPage />,
+  },
+  {
+    path: "write/:id?",
+    element: <WritePage />,
   },
 ]);
 

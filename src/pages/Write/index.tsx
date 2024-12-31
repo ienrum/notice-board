@@ -1,15 +1,15 @@
 import Header, { HeaderHome } from "@/components/ui/header";
-import DetailCard from "@/pages/Detail/components/DetailCard";
+import DetailFormCard from "@/pages/Write/components/DetailFormCard";
 
-const DetailPage = () => {
+const WritePage = () => {
   return (
     <>
       <Header left={<HeaderHome />} />
       <div className="flex justify-center min-w-96 min-h-96 p-8 gap-4">
-        <DetailCard />
+        <DetailFormCard />
       </div>
     </>
   );
 };
 
-export default DetailPage;
+export default WritePage;
