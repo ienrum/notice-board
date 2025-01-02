@@ -7,20 +7,38 @@ interface PostThreadRequest {
   author: string;
 }
 
+interface PostThreadResponse {
+  message: string;
+}
+
 const postThread = async (data: PostThreadRequest) => {
-  const response = await axiosInstance.post("threads", data);
+  const response = await axiosInstance.post<PostThreadResponse>(
+    "threads",
+    data
+  );
 
   return response.data;
 };
 
-export const usePostThread = (handleSuccess: () => void) => {
+interface UsePostThreadProps {
+  onSuccess?: () => void;
+  onError?: () => void;
+}
+
+export const usePostThread = ({
+  onSuccess: handleSuccess,
+  onError: handleError,
+}: UsePostThreadProps) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: postThread,
-    onSettled: async () => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["threads"] });
-      handleSuccess();
+      handleSuccess?.();
+    },
+    onError: () => {
+      handleError?.();
     },
   });
 };

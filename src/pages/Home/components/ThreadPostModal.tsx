@@ -25,7 +25,10 @@ const ThreadPostFormModal = ({
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: postThread } = usePostThread(() => setOpen(false));
+  const { mutate: postThread } = usePostThread({
+    onSuccess: () => setOpen(false),
+    onError: () => alert("로그인 후 이용해주세요."),
+  });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
