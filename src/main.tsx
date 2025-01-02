@@ -7,6 +7,8 @@ import TanstackQueryProvider from "@/providers/tanstackQuery";
 import HomePage from "@/pages/Home";
 import DetailPage from "@/pages/Detail";
 import WritePage from "@/pages/Write";
+import Signup from "@/pages/Signup";
+import Signin from "@/pages/Signin";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
   {
     path: "write/:id?",
     element: <WritePage />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/signin",
+    element: <Signin />,
   },
 ]);
 
