@@ -1,4 +1,4 @@
-import Header, { HeaderHome } from "@/components/ui/header";
+import Header, { HeaderHome, HeaderProfile } from "@/components/ui/header";
 import ThreadList from "@/pages/Home/components/ThreadList";
 import ThreadPostFormModal from "@/pages/Home/components/ThreadPostModal";
 import { Suspense } from "react";
@@ -6,7 +6,7 @@ import { Suspense } from "react";
 const HomePage = () => {
   return (
     <>
-      <Header left={<HeaderHome />} />
+      <Header left={<HeaderHome />} right={<HeaderProfile />} />
       <div className="p-8">
         <Suspense fallback={<div>Loading...</div>}>
           <ThreadList />

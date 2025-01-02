@@ -1,4 +1,5 @@
-import { HomeIcon } from "lucide-react";
+import { useIsAuthorized } from "@/apis/useIsAuthenticated";
+import { HomeIcon, LogInIcon, LogOutIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface HeaderProps {
@@ -23,4 +24,21 @@ export const HeaderHome = () => (
   </Link>
 );
 
+const ProfileLogin = () => (
+  <Link to="/logout">
+    <LogOutIcon size={24} />
+  </Link>
+);
+
+const ProfileLogout = () => (
+  <Link to="/signin">
+    <LogInIcon size={24} />
+  </Link>
+);
+
+export const HeaderProfile = () => {
+  const isAuthorized = useIsAuthorized();
+
+  return isAuthorized ? <ProfileLogin /> : <ProfileLogout />;
+};
 export default Header;
