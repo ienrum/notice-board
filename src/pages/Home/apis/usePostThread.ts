@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface PostThreadRequest {
   title: string;
   content: string;
-  author: string;
 }
 
 interface PostThreadResponse {

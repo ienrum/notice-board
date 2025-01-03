@@ -31,7 +31,6 @@ const DetailFormCard = () => {
     updateThread({
       title: titleRef.current.value,
       content: contentRef.current.value,
-      author,
     });
   };
 

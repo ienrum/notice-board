@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface RequestUpdateThread {
   title: string;
   content: string;
-  author: string;
 }
 
 const updateThread = async (threadId: number, data: RequestUpdateThread) => {

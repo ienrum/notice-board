@@ -23,7 +23,6 @@ const ThreadPostFormModal = ({
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
-  const authorRef = useRef<HTMLInputElement>(null);
 
   const { mutate: postThread } = usePostThread({
     onSuccess: () => setOpen(false),
@@ -33,11 +32,7 @@ const ThreadPostFormModal = ({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (
-      !titleRef.current?.value ||
-      !contentRef.current?.value ||
-      !authorRef.current?.value
-    ) {
+    if (!titleRef.current?.value || !contentRef.current?.value) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
@@ -45,7 +40,6 @@ const ThreadPostFormModal = ({
     postThread({
       title: titleRef.current?.value,
       content: contentRef.current?.value,
-      author: authorRef.current?.value,
     });
   };
 
@@ -63,8 +57,6 @@ const ThreadPostFormModal = ({
           <Input id="title" type="text" ref={titleRef} />
           <Label htmlFor="content">내용</Label>
           <Textarea id="content" className="resize-none" ref={contentRef} />
-          <Label htmlFor="author">작성자</Label>
-          <Input id="author" type="text" ref={authorRef} />
           <Button type="submit">작성</Button>
         </form>
       </DialogContent>
