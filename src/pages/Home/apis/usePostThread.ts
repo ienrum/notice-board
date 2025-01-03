@@ -34,7 +34,7 @@ export const usePostThread = ({
   return useMutation({
     mutationFn: postThread,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["threads"] });
+      await queryClient.invalidateQueries({ queryKey: ["thread"] });
       handleSuccess?.();
     },
     onError: () => {
