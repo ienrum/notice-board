@@ -1,4 +1,5 @@
 import { useIsAuthorized } from "@/apis/useIsAuthenticated";
+import { useSignout } from "@/apis/useSignout";
 import { HomeIcon, LogInIcon, LogOutIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -24,17 +25,27 @@ export const HeaderHome = () => (
   </Link>
 );
 
-const ProfileLogin = () => (
-  <Link to="/logout">
-    <LogOutIcon size={24} />
-  </Link>
-);
+const ProfileLogin = () => {
+  const { mutate: logout } = useSignout();
 
-const ProfileLogout = () => (
-  <Link to="/signin">
-    <LogInIcon size={24} />
-  </Link>
-);
+  const handleLogout = () => {
+    logout();
+  };
+
+  return (
+    <Link to="">
+      <LogOutIcon size={24} onClick={handleLogout} />
+    </Link>
+  );
+};
+
+const ProfileLogout = () => {
+  return (
+    <Link to="/signin">
+      <LogInIcon size={24} />
+    </Link>
+  );
+};
 
 export const HeaderProfile = () => {
   const isAuthorized = useIsAuthorized();
