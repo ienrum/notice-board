@@ -36,29 +36,7 @@ const DetailCard = () => {
         <CardHeader>
           <CardTitle className=" text-3xl">{title}</CardTitle>
           <div className="flex gap-4 justify-between w-full pt-4">
-            <p className="flex items-center">작성자: {author}</p>
-            <div className="flex">
-              <Dialog>
-                <DialogTrigger>
-                  <Button variant="link" className="w-fit">
-                    삭제
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogDescription>
-                      정말로 삭제하시겠습니까?
-                    </DialogDescription>
-                  </DialogHeader>
-                  <Button onClick={handleDelete} variant="destructive">
-                    확인
-                  </Button>
-                </DialogContent>
-              </Dialog>
-              <Button variant="link" className="w-fit" onClick={handleUpdate}>
-                수정
-              </Button>
-            </div>
+            <p className="flex items-center">작성자: {author.name}</p>
           </div>
         </CardHeader>
         <CardContent>
