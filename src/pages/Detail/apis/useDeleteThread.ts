@@ -11,7 +11,7 @@ export const useDeleteThread = (threadId: number, onSuccess?: () => void) => {
   return useMutation({
     mutationFn: () => deleteThread(threadId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
+      await queryClient.removeQueries({
         queryKey: ["thread", threadId],
       });
       onSuccess?.();
