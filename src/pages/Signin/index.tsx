@@ -8,7 +8,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignin } from "@/pages/Signin/apis/useSignin";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useEffect, useRef } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
@@ -19,6 +20,35 @@ const Signin = () => {
 
   const { mutate: signin } = useSignin(() => navigate("/"));
 
+  const saveSharedPref = (prefKey: string, prefValue: string) => {
+    if (window.Android && window.Android.saveString) {
+      window.Android.saveString(prefKey, prefValue);
+    }
+
+    return null;
+  };
+
+  const loadSharedPref = (prefKey: string) => {
+    if (window.Android && window.Android.getString) {
+      return window.Android.getString(prefKey);
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      const name = loadSharedPref("name");
+      const password = loadSharedPref("password");
+
+      if (name && password) {
+        signin({ name, password });
+      }
+    };
+
+    loadData();
+  }, [signin]);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -26,6 +56,9 @@ const Signin = () => {
       alert("모든 필드를 입력해주세요.");
       return;
     }
+
+    saveSharedPref("name", nameRef.current?.value);
+    saveSharedPref("password", passwordRef.current?.value);
 
     signin({
       name: nameRef.current?.value,
