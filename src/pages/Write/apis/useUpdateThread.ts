@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface RequestUpdateThread {
   title: string;
   content: string;
-  author: string;
 }
 
 const updateThread = async (threadId: number, data: RequestUpdateThread) => {
@@ -18,7 +17,7 @@ export const useUpdateThread = (threadId: number, onSuccess?: () => void) => {
     mutationFn: (data: RequestUpdateThread) => updateThread(threadId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["threads"],
+        queryKey: ["thread"],
       });
       onSuccess?.();
     },

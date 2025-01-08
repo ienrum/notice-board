@@ -6,3 +6,5 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+axiosInstance.defaults.withCredentials = true;

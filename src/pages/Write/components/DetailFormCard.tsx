@@ -31,7 +31,6 @@ const DetailFormCard = () => {
     updateThread({
       title: titleRef.current.value,
       content: contentRef.current.value,
-      author,
     });
   };
 
@@ -45,7 +44,7 @@ const DetailFormCard = () => {
           <CardTitle className=" text-3xl">
             <Input ref={titleRef} defaultValue={title} />
           </CardTitle>
-          <p className="w-full flex justify-end">작성자: {author}</p>
+          <p className="w-full flex justify-end">작성자: {author.name}</p>
         </CardHeader>
         <CardContent className="w-full">
           <Textarea ref={contentRef} defaultValue={content} />

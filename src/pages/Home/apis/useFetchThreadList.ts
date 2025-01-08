@@ -18,7 +18,7 @@ const fetchThreadList = (page: number) => {
 
 export const useFetchThreadList = (page: number) => {
   return useQuery({
-    queryKey: ["threads", page],
+    queryKey: ["thread", page],
     queryFn: () => fetchThreadList(page),
     placeholderData: keepPreviousData,
     select: (data) => data.data,

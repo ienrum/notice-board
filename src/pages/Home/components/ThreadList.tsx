@@ -19,11 +19,16 @@ const ThreadList = () => {
       {data?.data.map((thread) => (
         <ThreadItem key={thread.id} {...thread} />
       ))}
-      <Pagination
-        setPage={setPage}
-        page={page}
-        totalPage={data?.totalPage || 5}
-      />
+      {data?.data.length === 0 && (
+        <div className="text-center">Thread is Empty</div>
+      )}
+      {data && data.totalPage > 0 && (
+        <Pagination
+          setPage={setPage}
+          page={page}
+          totalPage={data?.totalPage ?? 5}
+        />
+      )}
     </div>
   );
 };
