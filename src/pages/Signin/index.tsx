@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 import { useSignin } from "@/pages/Signin/apis/useSignin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -30,7 +31,16 @@ const formSchema = z.object({
 const Signin = () => {
   const navigate = useNavigate();
 
-  const { mutate: signin } = useSignin(() => navigate("/"));
+  const { mutate: signin } = useSignin({
+    onSuccess: () => navigate("/"),
+    onError: (error) => {
+      if (error?.response?.status === 404) {
+        toast({ description: "존재하지 않는 사용자입니다." });
+      } else if (error?.response?.status === 403) {
+        toast({ description: "비밀번호가 일치하지 않습니다." });
+      }
+    },
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

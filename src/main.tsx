@@ -9,6 +9,7 @@ import DetailPage from "@/pages/Detail";
 import WritePage from "@/pages/Write";
 import Signup from "@/pages/Signup";
 import Signin from "@/pages/Signin";
+import { Toaster } from "@/components/ui/toaster";
 
 const router = createBrowserRouter([
   {
@@ -38,5 +39,6 @@ createRoot(document.getElementById("root")!).render(
     <TanstackQueryProvider>
       <RouterProvider router={router} />
     </TanstackQueryProvider>
+    <Toaster />
   </StrictMode>
 );

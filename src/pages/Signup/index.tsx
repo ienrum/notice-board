@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 import { useSignup } from "@/pages/Signup/apis/useSignup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -43,7 +44,14 @@ const formSchema = z.object({
 const Signup = () => {
   const navigate = useNavigate();
 
-  const { mutate: signup } = useSignup(() => navigate("/signin"));
+  const { mutate: signup } = useSignup({
+    onSuccess: () => navigate("/signin"),
+    onError: (error) => {
+      if (error?.response?.status === 409) {
+        toast({ description: "이미 존재하는 닉네임입니다." });
+      }
+    },
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
