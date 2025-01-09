@@ -21,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   title: z
@@ -49,7 +50,14 @@ const ThreadPostFormModal = ({
 
   const { mutate: postThread } = usePostThread({
     onSuccess: () => setOpen(false),
-    onError: () => alert("로그인 후 이용해주세요."),
+    onError: (error) => {
+      if (error.response?.status === 401) {
+        toast({
+          variant: "destructive",
+          description: "로그인이 필요합니다.",
+        });
+      }
+    },
   });
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
