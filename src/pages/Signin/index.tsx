@@ -35,9 +35,15 @@ const Signin = () => {
     onSuccess: () => navigate("/"),
     onError: (error) => {
       if (error?.response?.status === 404) {
-        toast({ description: "존재하지 않는 사용자입니다." });
+        toast({
+          variant: "destructive",
+          description: "존재하지 않는 사용자입니다.",
+        });
       } else if (error?.response?.status === 403) {
-        toast({ description: "비밀번호가 일치하지 않습니다." });
+        toast({
+          variant: "destructive",
+          description: "비밀번호가 일치하지 않습니다.",
+        });
       }
     },
   });
