@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import UpdateDeleteDialog from "@/pages/Detail/components/UpdateDeleteDialog";
-import { useFetchThread } from "@/pages/Home/apis/fetchThread";
+import { useFetchThread } from "@/pages/Home/apis/useFetchThread";
 import { useParams } from "react-router-dom";
 
 const DetailCard = () => {
   const threadId = useParams().id as string;
   const {
-    data: { title, content, author, isMyThread },
+    data: { title, content, author, isAuthor },
   } = useFetchThread(Number(threadId));
 
   return (
@@ -16,7 +16,7 @@ const DetailCard = () => {
           <CardTitle className=" text-3xl">{title}</CardTitle>
           <div className="flex gap-4 justify-between w-full pt-4">
             <p className="flex items-center">작성자: {author.name}</p>
-            {isMyThread && <UpdateDeleteDialog />}
+            {isAuthor && <UpdateDeleteDialog />}
           </div>
         </CardHeader>
         <CardContent>

@@ -16,10 +16,10 @@ const ThreadList = () => {
 
   return (
     <div className="flex flex-col gap-[1px] ">
-      {data?.data.map((thread) => (
+      {data?.threads.map((thread) => (
         <ThreadItem key={thread.id} {...thread} />
       ))}
-      {data?.data.length === 0 && (
+      {data?.threads.length === 0 && (
         <div className="text-center">Thread is Empty</div>
       )}
       {data && data.totalPage > 0 && (
