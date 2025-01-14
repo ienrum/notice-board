@@ -4,11 +4,18 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 interface ThreadItem {
   id: number;
   title: string;
-  author: string;
+  content: string;
+  viewCount: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    id: number;
+    name: string;
+  };
 }
 
 interface ThreadListResponse {
-  data: ThreadItem[];
+  threads: ThreadItem[];
   totalPage: number;
 }
 
