@@ -36,20 +36,12 @@ const CommentItem = ({
           <p>{generateDateString(updatedAt)}</p>
         </div>
       </div>
-      {isAuthor && (
-        <div className="flex gap-2 items-center">
-          {!isEditing && (
-            <>
-              <Button
-                size="sm"
-                onClick={() => setIsEditing(true)}
-                variant="link"
-              >
-                수정
-              </Button>
-              <CommentDeletionButton commentId={commentId} />
-            </>
-          )}
+      {isAuthor && !isEditing && (
+        <div className="flex items-center">
+          <Button size="sm" onClick={() => setIsEditing(true)} variant="link">
+            수정
+          </Button>
+          <CommentDeletionButton commentId={commentId} />
         </div>
       )}
     </div>
