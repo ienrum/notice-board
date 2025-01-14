@@ -40,7 +40,11 @@ const CommentItem = ({
         <div className="flex gap-2 items-center">
           {!isEditing && (
             <>
-              <Button size="sm" onClick={() => setIsEditing(true)}>
+              <Button
+                size="sm"
+                onClick={() => setIsEditing(true)}
+                variant="link"
+              >
                 수정
               </Button>
               <CommentDeletionButton commentId={commentId} />

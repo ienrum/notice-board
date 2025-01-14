@@ -30,7 +30,7 @@ const CommentDeletionButton = ({ commentId }: CommentDeletionButtonProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button size="sm" variant="destructive">
+        <Button size="sm" variant="link">
           삭제
         </Button>
       </DialogTrigger>
