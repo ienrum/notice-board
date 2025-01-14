@@ -1,5 +1,5 @@
 import { useFetchCommentList } from "@/pages/Detail/apis/useFetchCommentList";
-import CommentItem from "@/pages/Detail/components/CommentItem";
+import CommentItem from "@/pages/Detail/components/comment/CommentItem";
 import { useParams } from "react-router-dom";
 
 const CommentList = () => {

@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 
-const formSchema = z.object({
+export const commentFormSchema = z.object({
   comment: z
     .string()
     .min(3, { message: "3글자 이상 입력해주세요" })
@@ -34,12 +34,12 @@ const CommentForm = () => {
     },
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof commentFormSchema>>({
+    resolver: zodResolver(commentFormSchema),
     defaultValues: { comment: "" },
   });
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = (values: z.infer<typeof commentFormSchema>) => {
     createComment(values.comment, {
       onSuccess: () => {
         form.setValue("comment", "");
