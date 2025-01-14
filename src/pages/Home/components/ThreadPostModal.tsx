@@ -7,10 +7,32 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostThread } from "@/pages/Home/apis/usePostThread";
-import { FormEvent, useRef, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "@/hooks/use-toast";
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(3, { message: "3글자 이상 입력해주세요." })
+    .max(20, { message: "20글자 이하로 입력해주세요." }),
+  content: z
+    .string()
+    .min(10, { message: "10글자 이상 입력해주세요." })
+    .max(255, { message: "255글자 이하로 입력해주세요." }),
+});
 
 interface ThreadPostFormModalProps {
   TriggerComponent?: React.FC;
@@ -21,25 +43,27 @@ const ThreadPostFormModal = ({
 }: ThreadPostFormModalProps) => {
   const [open, setOpen] = useState(false);
 
-  const titleRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { title: "", content: "" },
+  });
 
   const { mutate: postThread } = usePostThread({
     onSuccess: () => setOpen(false),
-    onError: () => alert("로그인 후 이용해주세요."),
+    onError: (error) => {
+      if (error.response?.status === 401) {
+        toast({
+          variant: "destructive",
+          description: "로그인이 필요합니다.",
+        });
+      }
+    },
   });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!titleRef.current?.value || !contentRef.current?.value) {
-      alert("모든 필드를 입력해주세요.");
-      return;
-    }
-
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
     postThread({
-      title: titleRef.current?.value,
-      content: contentRef.current?.value,
+      title: values.title,
+      content: values.content,
     });
   };
 
@@ -52,13 +76,40 @@ const ThreadPostFormModal = ({
         <DialogHeader>
           <DialogTitle>글 작성</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-          <Label htmlFor="title">제목</Label>
-          <Input id="title" type="text" ref={titleRef} />
-          <Label htmlFor="content">내용</Label>
-          <Textarea id="content" className="resize-none" ref={contentRef} />
-          <Button type="submit">작성</Button>
-        </form>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col gap-4 "
+          >
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>제목</FormLabel>
+                  <FormControl>
+                    <Input {...field} id="title" type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>내용</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} id="content" className="resize-none" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">작성</Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

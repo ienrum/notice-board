@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 interface PostThreadRequest {
   title: string;
@@ -21,7 +22,7 @@ const postThread = async (data: PostThreadRequest) => {
 
 interface UsePostThreadProps {
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: AxiosError) => void;
 }
 
 export const usePostThread = ({
@@ -36,8 +37,6 @@ export const usePostThread = ({
       await queryClient.invalidateQueries({ queryKey: ["thread"] });
       handleSuccess?.();
     },
-    onError: () => {
-      handleError?.();
-    },
+    onError: handleError,
   });
 };

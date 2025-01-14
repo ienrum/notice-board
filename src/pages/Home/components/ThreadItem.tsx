@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 interface ThreadItemProps {
   id: number;
   title: string;
-  author: string;
+  author: {
+    id: number;
+    name: string;
+  };
 }
 
 const ThreadItem = ({ id, title, author }: ThreadItemProps) => {
@@ -13,7 +16,7 @@ const ThreadItem = ({ id, title, author }: ThreadItemProps) => {
       to={`/thread/${id}`}
     >
       <span>{title}</span>
-      <span>{author}</span>
+      <span>{author.name}</span>
     </Link>
   );
 };

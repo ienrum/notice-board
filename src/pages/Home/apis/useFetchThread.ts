@@ -1,17 +1,20 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-interface User {
+interface Author {
   id: number;
   name: string;
 }
 
 interface ThreadResponse {
+  author: Author;
   id: number;
   title: string;
   content: string;
-  author: User;
-  isMyThread: boolean;
+  viewCount: number;
+  isAuthor: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const fetchThread = async (id: number): Promise<ThreadResponse> => {

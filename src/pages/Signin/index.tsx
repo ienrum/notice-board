@@ -5,20 +5,53 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { useSignin } from "@/pages/Signin/apis/useSignin";
-import { FormEvent, useEffect, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+
+const formSchema = z.object({
+  name: z.string({ message: "이름을 입력해주세요." }),
+  password: z.string({ message: "비밀번호를 입력해주세요." }),
+});
 
 const Signin = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
   const navigate = useNavigate();
 
-  const { mutate: signin } = useSignin(() => navigate("/"));
+  const { mutate: signin } = useSignin({
+    onSuccess: () => navigate("/"),
+    onError: (error) => {
+      if (error?.response?.status === 404) {
+        toast({
+          variant: "destructive",
+          description: "존재하지 않는 사용자입니다.",
+        });
+      } else if (error?.response?.status === 403) {
+        toast({
+          variant: "destructive",
+          description: "비밀번호가 일치하지 않습니다.",
+        });
+      }
+    },
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { name: "", password: "" },
+  });
 
   const saveSharedPref = (prefKey: string, prefValue: string) => {
     if (window.Android && window.Android.saveString) {
@@ -49,20 +82,13 @@ const Signin = () => {
     loadData();
   }, [signin]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!nameRef.current?.value || !passwordRef.current?.value) {
-      alert("모든 필드를 입력해주세요.");
-      return;
-    }
-
-    saveSharedPref("name", nameRef.current?.value);
-    saveSharedPref("password", passwordRef.current?.value);
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    saveSharedPref("name", values.name);
+    saveSharedPref("password", values.password);
 
     signin({
-      name: nameRef.current?.value,
-      password: passwordRef.current?.value,
+      name: values.name,
+      password: values.password,
     });
   };
 
@@ -71,13 +97,40 @@ const Signin = () => {
       <Card className="w-full">
         <CardHeader>Sign in</CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Label htmlFor="name">닉네임</Label>
-            <Input ref={nameRef} id="name" type="text" />
-            <Label htmlFor="password">비밀번호</Label>
-            <Input ref={passwordRef} id="password" type="password" />
-            <Button type="submit">로그인</Button>
-          </form>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>닉네임</FormLabel>
+                    <FormControl>
+                      <Input {...field} id="name" type="text" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input {...field} id="password" type="password" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Sign in</Button>
+            </form>
+          </Form>
         </CardContent>
         <CardFooter>
           <Button variant="link" onClick={() => navigate("/signup")}>

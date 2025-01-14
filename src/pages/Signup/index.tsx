@@ -5,41 +5,66 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { useSignup } from "@/pages/Signup/apis/useSignup";
-import { FormEvent, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "3글자 이상 입력해주세요." })
+    .max(20, { message: "20글자 이하로 입력해주세요." }),
+  password: z
+    .string()
+    .min(8, { message: "6글자 이상 입력해주세요." })
+    .max(20, {
+      message: "20글자 이하로 입력해주세요.",
+    })
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+      {
+        message:
+          "비밀번호는 최소 하나의 대문자, 소문자, 숫자, 특수문자를 포함해야합니다.",
+      }
+    ),
+});
 
 const Signup = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const checkPasswordRef = useRef<HTMLInputElement>(null);
-
   const navigate = useNavigate();
 
-  const { mutate: signup } = useSignup(() => navigate("/signin"));
+  const { mutate: signup } = useSignup({
+    onSuccess: () => navigate("/signin"),
+    onError: (error) => {
+      if (error?.response?.status === 409) {
+        toast({
+          variant: "destructive",
+          description: "이미 존재하는 닉네임입니다.",
+        });
+      }
+    },
+  });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { name: "", password: "" },
+  });
 
-    if (
-      !nameRef.current?.value ||
-      !passwordRef.current?.value ||
-      !checkPasswordRef.current?.value
-    ) {
-      alert("모든 필드를 입력해주세요.");
-      return;
-    }
-
-    if (passwordRef.current?.value !== checkPasswordRef.current?.value) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
     signup({
-      name: nameRef.current?.value,
-      password: passwordRef.current?.value,
+      name: values.name,
+      password: values.password,
     });
   };
 
@@ -48,15 +73,40 @@ const Signup = () => {
       <Card className="w-full">
         <CardHeader>Sign up</CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Label htmlFor="name">닉네임</Label>
-            <Input ref={nameRef} id="name" type="text" />
-            <Label htmlFor="password">비밀번호</Label>
-            <Input ref={passwordRef} id="password" type="password" />
-            <Label htmlFor="checkPassword">비밀번호 확인</Label>
-            <Input ref={checkPasswordRef} id="checkPassword" type="password" />
-            <Button type="submit">회원가입</Button>
-          </form>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>닉네임</FormLabel>
+                    <FormControl>
+                      <Input {...field} id="name" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input {...field} id="password" type="password" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Sign up</Button>
+            </form>
+          </Form>
         </CardContent>
         <CardFooter>
           <Button variant="link" onClick={() => navigate("/signin")}>
