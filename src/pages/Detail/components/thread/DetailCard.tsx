@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import UpdateDeleteDialog from "@/pages/Detail/components/UpdateDeleteDialog";
+import UpdateDeleteDialog from "@/pages/Detail/components/thread/UpdateDeleteDialog";
 import { useFetchThread } from "@/pages/Home/apis/useFetchThread";
 import { useParams } from "react-router-dom";
 

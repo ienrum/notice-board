@@ -1,7 +1,7 @@
 import Header, { HeaderHome } from "@/components/ui/header";
-import CommentForm from "@/pages/Detail/components/CommentForm";
-import CommentList from "@/pages/Detail/components/CommentList";
-import DetailCard from "@/pages/Detail/components/DetailCard";
+import CommentForm from "@/pages/Detail/components/comment/CommentForm";
+import CommentList from "@/pages/Detail/components/comment/CommentList";
+import DetailCard from "@/pages/Detail/components/thread/DetailCard";
 
 const DetailPage = () => {
   return (
