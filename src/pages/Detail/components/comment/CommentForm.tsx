@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { useCreateComment } from "@/pages/Detail/apis/useCreateComment";
+import { useCreateComment } from "@/pages/Detail/apis/comment/useCreateComment";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";

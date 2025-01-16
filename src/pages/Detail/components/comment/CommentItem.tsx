@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { generateDateString } from "@/lib/generateDateString";
-import { CommentItem as CommentItemResponse } from "@/pages/Detail/apis/useFetchCommentList";
+import { CommentItem as CommentItemResponse } from "@/pages/Detail/apis/comment/useFetchCommentList";
 import CommentDeletionButton from "@/pages/Detail/components/comment/CommentDeletionButton";
 import CommentUpdateForm from "@/pages/Detail/components/comment/CommentUpdateForm";
 import { useState } from "react";

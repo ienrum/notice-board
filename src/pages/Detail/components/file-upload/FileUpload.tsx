@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDeleteFile } from "@/pages/Detail/apis/useDeleteFile";
-import { useFetchFiles } from "@/pages/Detail/apis/useFetchFiles";
-import { useUploadFiles } from "@/pages/Detail/apis/useUploadFiles";
+import { useDeleteFile } from "@/pages/Detail/apis/file/useDeleteFile";
+import { useFetchFiles } from "@/pages/Detail/apis/file/useFetchFiles";
+import { useUploadFiles } from "@/pages/Detail/apis/file/useUploadFiles";
 import FilePreviewList from "@/pages/Detail/components/file-upload/FilePreviewList";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

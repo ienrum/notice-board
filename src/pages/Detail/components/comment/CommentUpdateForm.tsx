@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { useUpdateComment } from "@/pages/Detail/apis/useUpdateComment";
+import { useUpdateComment } from "@/pages/Detail/apis/comment/useUpdateComment";
 import { commentFormSchema } from "@/pages/Detail/components/comment/CommentForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
