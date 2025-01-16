@@ -27,7 +27,11 @@ const CommentForm = () => {
 
   const { mutate: createComment } = useCreateComment({
     threadId: Number(threadId),
-    handleError: (error) => {
+    onSuccess: () => {
+      form.setValue("comment", "");
+      toast({ description: "댓글이 작성되었습니다" });
+    },
+    onError: (error) => {
       if (error.response?.status === 401) {
         toast({ description: "로그인이 필요합니다", variant: "destructive" });
       }
@@ -40,12 +44,7 @@ const CommentForm = () => {
   });
 
   const handleSubmit = (values: z.infer<typeof commentFormSchema>) => {
-    createComment(values.comment, {
-      onSuccess: () => {
-        form.setValue("comment", "");
-        toast({ description: "댓글이 작성되었습니다" });
-      },
-    });
+    createComment(values.comment);
   };
 
   return (
