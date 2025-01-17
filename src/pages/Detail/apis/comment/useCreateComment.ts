@@ -11,12 +11,14 @@ const createComment = async (threadId: number, content: string) => {
 
 interface CreateCommentParams {
   threadId: number;
-  handleError: (error: AxiosError) => void;
+  onError: (error: AxiosError) => void;
+  onSuccess?: () => void;
 }
 
 export const useCreateComment = ({
   threadId,
-  handleError,
+  onError,
+  onSuccess,
 }: CreateCommentParams) => {
   const queryClient = useQueryClient();
 
@@ -24,7 +26,8 @@ export const useCreateComment = ({
     mutationFn: (content: string) => createComment(threadId, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comment", threadId] });
+      onSuccess?.();
     },
-    onError: handleError,
+    onError,
   });
 };

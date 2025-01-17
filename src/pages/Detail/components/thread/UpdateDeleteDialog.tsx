@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useDeleteThread } from "@/pages/Detail/apis/useDeleteThread";
+import { useDeleteThread } from "@/pages/Detail/apis/thread/useDeleteThread";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateDeleteDialog = () => {

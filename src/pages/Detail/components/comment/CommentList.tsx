@@ -1,4 +1,4 @@
-import { useFetchCommentList } from "@/pages/Detail/apis/useFetchCommentList";
+import { useFetchCommentList } from "@/pages/Detail/apis/comment/useFetchCommentList";
 import CommentItem from "@/pages/Detail/components/comment/CommentItem";
 import { useParams } from "react-router-dom";
 
