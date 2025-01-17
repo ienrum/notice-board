@@ -1,29 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
-import { useDeleteFile } from "@/pages/Detail/apis/file/useDeleteFile";
 import { useFetchFiles } from "@/pages/Detail/apis/file/useFetchFiles";
-import { useUploadFiles } from "@/pages/Detail/apis/file/useUploadFiles";
 import FilePreviewList from "@/pages/Detail/components/file-upload/FilePreviewList";
-import { useEffect, useState } from "react";
+import useFileApi from "@/pages/Detail/hooks/useFileApi";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-
-interface NewFile {
-  id: number;
-  name: string;
-  file: File;
-}
-
-interface ExistFile {
-  id: number;
-  name: string;
-  size: number;
-  url: string;
-}
-
-interface DeleteFile {
-  id: number;
-}
 
 const FileUpload = () => {
   const threadId = useParams<{ id: string }>().id!;
@@ -32,57 +13,25 @@ const FileUpload = () => {
     data: { files: fetchedFiles, isAuthor },
   } = useFetchFiles(Number(threadId));
   const [isEditing, setIsEditing] = useState(false);
-  const [existFiles, setExistFiles] = useState<ExistFile[]>(fetchedFiles || []);
-  const [deleteFiles, setDeleteFiles] = useState<DeleteFile[]>([]);
-  const [newFiles, setNewFiles] = useState<NewFile[]>([]);
 
-  useEffect(() => {
-    setExistFiles(fetchedFiles || []);
-  }, [fetchedFiles]);
-
-  const previewFiles = [...existFiles, ...newFiles];
-
-  const { mutate: uploadFile } = useUploadFiles({
-    threadId: Number(threadId),
-    onSuccess: () => {
-      toast({ description: "파일 업로드에 성공했습니다." });
-    },
-    onError: (error) => {
-      const errorMessage = (error.response?.data as { message?: string })
-        ?.message;
-      if (errorMessage === "Too many files") {
-        toast({
-          description: "파일은 최대 10개까지 업로드 가능합니다.",
-          variant: "destructive",
-        });
-      } else if (errorMessage === "File too large") {
-        toast({
-          description: "파일은 최대 1MB까지 업로드 가능합니다.",
-          variant: "destructive",
-        });
-      }
+  const {
+    existFiles,
+    previewFiles,
+    handleSetNewFiles,
+    handleResetFilesState,
+    handleRemoveExistFile,
+    handleSubmit,
+  } = useFileApi({
+    fetchedFiles,
+    threadId,
+    onSubmit: () => {
+      setIsEditing(false);
     },
   });
-  const { mutate: deleteFile } = useDeleteFile({
-    threadId: Number(threadId),
-    onSucess: () => handleResetStates(),
-  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData();
-
-    newFiles.forEach((file) => {
-      formData.append("files", file.file);
-    });
-
-    uploadFile(formData);
-    const deleteFilesIds = deleteFiles.map((file) => file.id);
-    if (deleteFilesIds.length > 0) {
-      deleteFile(deleteFilesIds);
-    }
-
-    handleToggleEditing();
+  const handleToggleEditing = () => {
+    setIsEditing((prev) => !prev);
+    handleResetFilesState();
   };
 
   const handleChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,32 +44,8 @@ const FileUpload = () => {
         file,
       }));
 
-      setNewFiles(newFilesArray);
+      handleSetNewFiles(newFilesArray);
     }
-  };
-
-  const handleToggleEditing = () => {
-    setIsEditing(!isEditing);
-    handleResetStates();
-  };
-
-  const handleResetStates = () => {
-    setNewFiles([]);
-    setDeleteFiles([]);
-    setExistFiles(fetchedFiles || []);
-  };
-
-  const handleRemoveExistFile = (fileId: number) => {
-    const isDeletFileInExistFiles = existFiles.find(
-      (file) => file.id === fileId
-    );
-    if (!isDeletFileInExistFiles) {
-      setNewFiles(newFiles.filter((file) => file.id !== fileId));
-      return;
-    }
-
-    setExistFiles(existFiles.filter((file) => file.id !== fileId));
-    setDeleteFiles([...deleteFiles, { id: fileId }]);
   };
 
   return (
