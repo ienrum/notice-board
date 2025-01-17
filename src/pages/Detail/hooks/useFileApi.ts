@@ -4,7 +4,7 @@ import { useUploadFiles } from "@/pages/Detail/apis/file/useUploadFiles";
 import { useEffect, useState } from "react";
 
 interface NewFile {
-  id: number;
+  id: string;
   name: string;
   file: File;
 }
@@ -92,17 +92,21 @@ const useFileApi = ({
     setExistFiles(fetchedFiles || []);
   };
 
-  const handleRemoveExistFile = (fileId: number) => {
-    const isDeletFileInExistFiles = existFiles.find(
-      (file) => file.id === fileId
-    );
-    if (!isDeletFileInExistFiles) {
-      setNewFiles(newFiles.filter((file) => file.id !== fileId));
-      return;
+  const handleRemoveFile = (fileId: number | string) => {
+    if (typeof fileId === "number") {
+      handleRemoveExistFile(fileId);
+    } else {
+      handleRemoveNewFile(fileId);
     }
+  };
 
+  const handleRemoveExistFile = (fileId: number) => {
     setExistFiles(existFiles.filter((file) => file.id !== fileId));
     setDeleteFiles([...deleteFiles, { id: fileId }]);
+  };
+
+  const handleRemoveNewFile = (fileId: string) => {
+    setNewFiles(newFiles.filter((file) => file.id !== fileId));
   };
 
   return {
@@ -110,7 +114,7 @@ const useFileApi = ({
     previewFiles,
     handleSetNewFiles: setNewFiles,
     handleResetFilesState,
-    handleRemoveExistFile,
+    handleRemoveFile,
     handleSubmit,
   };
 };

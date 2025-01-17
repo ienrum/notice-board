@@ -19,7 +19,7 @@ const DeleteButton = ({ onClick }: { onClick: () => void }) => {
 };
 
 interface FilePreview {
-  id: number;
+  id: number | string;
   name: string;
   url?: string;
 }

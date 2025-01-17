@@ -5,6 +5,7 @@ import FilePreviewList from "@/pages/Detail/components/file-upload/FilePreviewLi
 import useFileApi from "@/pages/Detail/hooks/useFileApi";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { v4 } from "uuid";
 
 const FileUpload = () => {
   const threadId = useParams<{ id: string }>().id!;
@@ -19,7 +20,7 @@ const FileUpload = () => {
     previewFiles,
     handleSetNewFiles,
     handleResetFilesState,
-    handleRemoveExistFile,
+    handleRemoveFile,
     handleSubmit,
   } = useFileApi({
     fetchedFiles,
@@ -38,8 +39,8 @@ const FileUpload = () => {
     const files = e.target.files;
 
     if (files) {
-      const newFilesArray = Array.from(files).map((file, i) => ({
-        id: Date.now() + i,
+      const newFilesArray = Array.from(files).map((file) => ({
+        id: v4(),
         name: file.name,
         file,
       }));
@@ -82,7 +83,7 @@ const FileUpload = () => {
             files={previewFiles}
             render={(file) => (
               <FilePreviewList.DeleteButton
-                onClick={() => handleRemoveExistFile(file.id)}
+                onClick={() => handleRemoveFile(file.id)}
               />
             )}
           />
