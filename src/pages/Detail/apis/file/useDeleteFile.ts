@@ -7,10 +7,10 @@ const deleteFile = async (ids: number[]) => {
 
 interface UseDeleteFileParams {
   threadId: number;
-  onSucess?: () => void;
+  onSuccess?: () => void;
 }
 
-export const useDeleteFile = ({ threadId, onSucess }: UseDeleteFileParams) => {
+export const useDeleteFile = ({ threadId, onSuccess }: UseDeleteFileParams) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,7 +19,7 @@ export const useDeleteFile = ({ threadId, onSucess }: UseDeleteFileParams) => {
       queryClient.invalidateQueries({
         queryKey: ["file", threadId],
       });
-      onSucess?.();
+      onSuccess?.();
     },
   });
 };
