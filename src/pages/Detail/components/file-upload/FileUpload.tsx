@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 import { useDeleteFile } from "@/pages/Detail/apis/file/useDeleteFile";
 import { useFetchFiles } from "@/pages/Detail/apis/file/useFetchFiles";
 import { useUploadFiles } from "@/pages/Detail/apis/file/useUploadFiles";
@@ -43,6 +44,24 @@ const FileUpload = () => {
 
   const { mutate: uploadFile } = useUploadFiles({
     threadId: Number(threadId),
+    onSuccess: () => {
+      toast({ description: "파일 업로드에 성공했습니다." });
+    },
+    onError: (error) => {
+      const errorMessage = (error.response?.data as { message?: string })
+        ?.message;
+      if (errorMessage === "Too many files") {
+        toast({
+          description: "파일은 최대 10개까지 업로드 가능합니다.",
+          variant: "destructive",
+        });
+      } else if (errorMessage === "File too large") {
+        toast({
+          description: "파일은 최대 1MB까지 업로드 가능합니다.",
+          variant: "destructive",
+        });
+      }
+    },
   });
   const { mutate: deleteFile } = useDeleteFile({
     threadId: Number(threadId),

@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 const uploadFiles = async (threadId: number, files: FormData) => {
   return axiosInstance.post(`file/upload/${threadId}`, files, {
@@ -12,11 +13,13 @@ const uploadFiles = async (threadId: number, files: FormData) => {
 interface UseUploadFilesParams {
   threadId: number;
   onSuccess?: () => void;
+  onError?: (error: AxiosError) => void;
 }
 
 export const useUploadFiles = ({
   threadId,
   onSuccess,
+  onError,
 }: UseUploadFilesParams) => {
   const queryClient = useQueryClient();
 
@@ -27,6 +30,9 @@ export const useUploadFiles = ({
         queryKey: ["file", threadId],
       });
       onSuccess?.();
+    },
+    onError: (error: AxiosError) => {
+      onError?.(error);
     },
   });
 };
