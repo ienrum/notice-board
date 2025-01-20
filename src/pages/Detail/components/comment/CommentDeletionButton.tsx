@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { useDeleteComment } from "@/pages/Detail/apis/useDeleteComment";
+import { useDeleteComment } from "@/pages/Detail/apis/comment/useDeleteComment";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
