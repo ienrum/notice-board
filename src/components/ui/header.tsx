@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 const Header = ({ left, center, right }: HeaderProps) => (
-  <nav className="z-10 flex items-center justify-between w-full h-16 px-4 bg-white shadow-md">
+  <nav className="z-10 flex items-center justify-between w-full h-16 px-4 bg-white shadow-md sticky top-0">
     {left || <HeaderBlank />}
     {center || <HeaderBlank />}
     {right || <HeaderBlank />}
