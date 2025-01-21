@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axiosInstance";
+import { axiosInstance, BaseResponseDto } from "@/lib/axiosInstance";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 interface FileResponse {
@@ -14,13 +14,13 @@ interface FileResponse {
 }
 
 const getFiles = async (threadId: number) => {
-  return axiosInstance.get<FileResponse>(`file/${threadId}`);
+  return axiosInstance.get<BaseResponseDto<FileResponse>>(`file/${threadId}`);
 };
 
 export const useFetchFiles = (threadId: number) => {
   return useSuspenseQuery({
     queryKey: ["file", threadId],
     queryFn: () => getFiles(threadId),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };

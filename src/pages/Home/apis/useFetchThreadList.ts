@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axiosInstance";
+import { axiosInstance, BaseResponseDto } from "@/lib/axiosInstance";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 interface ThreadItem {
@@ -20,7 +20,9 @@ interface ThreadListResponse {
 }
 
 const fetchThreadList = (page: number) => {
-  return axiosInstance.get<ThreadListResponse>("threads", { params: { page } });
+  return axiosInstance.get<BaseResponseDto<ThreadListResponse>>("threads", {
+    params: { page },
+  });
 };
 
 export const useFetchThreadList = (page: number) => {
@@ -28,6 +30,6 @@ export const useFetchThreadList = (page: number) => {
     queryKey: ["thread", page],
     queryFn: () => fetchThreadList(page),
     placeholderData: keepPreviousData,
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };
