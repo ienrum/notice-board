@@ -49,7 +49,7 @@ const useFileApi = ({
 
   const previewFiles = [...existFiles, ...newFiles];
 
-  const { mutate: uploadFile } = useUploadFiles({
+  const { mutate: uploadFile, isPending: isUploadPending } = useUploadFiles({
     threadId: Number(threadId),
     onSuccess: () => {
       toast({ description: "파일 업로드에 성공했습니다." });
@@ -73,7 +73,7 @@ const useFileApi = ({
     },
   });
 
-  const { mutate: deleteFile } = useDeleteFile({
+  const { mutate: deleteFile, isPending: isDeletePending } = useDeleteFile({
     threadId: Number(threadId),
     onSuccess: () => handleResetFilesState(),
   });
@@ -122,6 +122,7 @@ const useFileApi = ({
     handleResetFilesState,
     handleRemoveFile,
     handleSubmit,
+    isPending: isUploadPending || isDeletePending,
   };
 };
 
