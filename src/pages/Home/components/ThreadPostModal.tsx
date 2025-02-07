@@ -48,7 +48,7 @@ const ThreadPostFormModal = ({
     defaultValues: { title: "", content: "" },
   });
 
-  const { mutate: postThread } = usePostThread({
+  const { mutate: postThread, isPending } = usePostThread({
     onSuccess: () => setOpen(false),
     onError: (error) => {
       if (error.response?.status === 401) {
@@ -107,7 +107,9 @@ const ThreadPostFormModal = ({
                 </FormItem>
               )}
             />
-            <Button type="submit">작성</Button>
+            <Button type="submit" disabled={isPending}>
+              작성
+            </Button>
           </form>
         </Form>
       </DialogContent>

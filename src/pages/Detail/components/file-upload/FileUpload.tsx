@@ -33,6 +33,7 @@ const FileUpload = () => {
     handleResetFilesState,
     handleRemoveFile,
     handleSubmit,
+    isPending,
   } = useFileApi({
     fetchedFiles,
     threadId,
@@ -116,7 +117,9 @@ const FileUpload = () => {
                         >
                           취소
                         </Button>
-                        <Button variant="outline">업로드</Button>
+                        <Button variant="outline" disabled={isPending}>
+                          업로드
+                        </Button>
                       </div>
                       <Input
                         type="file"

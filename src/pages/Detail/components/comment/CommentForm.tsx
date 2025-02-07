@@ -25,7 +25,7 @@ export const commentFormSchema = z.object({
 const CommentForm = () => {
   const threadId = useParams<{ id: string }>().id!;
 
-  const { mutate: createComment } = useCreateComment({
+  const { mutate: createComment, isPending } = useCreateComment({
     threadId: Number(threadId),
     onSuccess: () => {
       form.setValue("comment", "");
@@ -69,7 +69,11 @@ const CommentForm = () => {
               <div className="flex justify-between items-center">
                 {!fieldState.error && <span className="flex-1" />}
                 <FormMessage />
-                <Button type="submit" className="justify-center">
+                <Button
+                  type="submit"
+                  className="justify-center"
+                  disabled={isPending}
+                >
                   Submit
                 </Button>
               </div>
