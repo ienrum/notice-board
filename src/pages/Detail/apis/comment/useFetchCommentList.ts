@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axiosInstance";
+import { axiosInstance, BaseResponseDto } from "@/lib/axiosInstance";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 export interface CommentItem {
@@ -19,7 +19,7 @@ interface CommentListResponse {
 }
 
 const fetchCommentList = (threadId: number) => {
-  return axiosInstance.get<CommentListResponse>(
+  return axiosInstance.get<BaseResponseDto<CommentListResponse>>(
     `/threads/${threadId}/comments`
   );
 };
@@ -28,6 +28,6 @@ export const useFetchCommentList = (threadId: number) => {
   return useSuspenseQuery({
     queryKey: ["comment", threadId],
     queryFn: () => fetchCommentList(threadId),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };

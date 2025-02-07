@@ -44,7 +44,7 @@ const formSchema = z.object({
 const Signup = () => {
   const navigate = useNavigate();
 
-  const { mutate: signup } = useSignup({
+  const { mutate: signup, isPending } = useSignup({
     onSuccess: () => navigate("/signin"),
     onError: (error) => {
       if (error?.response?.status === 409) {
@@ -104,7 +104,9 @@ const Signup = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Sign up</Button>
+              <Button type="submit" disabled={isPending}>
+                Sign up
+              </Button>
             </form>
           </Form>
         </CardContent>

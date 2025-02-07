@@ -24,12 +24,14 @@ interface UseFileUploadParams {
   fetchedFiles: ExistFile[];
   threadId: string;
   onSubmit: () => void;
+  onFileChange?: (files: File[]) => void;
 }
 
 const useFileApi = ({
   fetchedFiles,
   threadId,
   onSubmit,
+  onFileChange,
 }: UseFileUploadParams) => {
   const [existFiles, setExistFiles] = useState<ExistFile[]>(fetchedFiles || []);
   const [deleteFiles, setDeleteFiles] = useState<DeleteFile[]>([]);
@@ -39,12 +41,20 @@ const useFileApi = ({
     setExistFiles(fetchedFiles || []);
   }, [fetchedFiles]);
 
+  useEffect(() => {
+    if (onFileChange) {
+      onFileChange(newFiles.map((file) => file.file));
+    }
+  }, [newFiles]);
+
   const previewFiles = [...existFiles, ...newFiles];
 
-  const { mutate: uploadFile } = useUploadFiles({
+  const { mutate: uploadFile, isPending: isUploadPending } = useUploadFiles({
     threadId: Number(threadId),
     onSuccess: () => {
       toast({ description: "파일 업로드에 성공했습니다." });
+      onSubmit();
+      handleResetFilesState();
     },
     onError: (error) => {
       const errorMessage = (error.response?.data as { message?: string })
@@ -63,13 +73,12 @@ const useFileApi = ({
     },
   });
 
-  const { mutate: deleteFile } = useDeleteFile({
+  const { mutate: deleteFile, isPending: isDeletePending } = useDeleteFile({
     threadId: Number(threadId),
     onSuccess: () => handleResetFilesState(),
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const formData = new FormData();
 
     newFiles.forEach((file) => {
@@ -81,9 +90,6 @@ const useFileApi = ({
     if (deleteFilesIds.length > 0) {
       deleteFile(deleteFilesIds);
     }
-
-    onSubmit();
-    handleResetFilesState();
   };
 
   const handleResetFilesState = () => {
@@ -116,6 +122,7 @@ const useFileApi = ({
     handleResetFilesState,
     handleRemoveFile,
     handleSubmit,
+    isPending: isUploadPending || isDeletePending,
   };
 };
 

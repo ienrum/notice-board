@@ -37,7 +37,7 @@ const CommentUpdateForm = ({
     onEditModeChange(false);
   };
 
-  const { mutate: updateComment } = useUpdateComment({
+  const { mutate: updateComment, isPending } = useUpdateComment({
     threadId: Number(threadId),
     commentId,
     onSuccess: () => {
@@ -81,6 +81,7 @@ const CommentUpdateForm = ({
           <Button
             size="sm"
             onClick={commentUpdateForm.handleSubmit(handleUpdateSubmit)}
+            disabled={isPending}
           >
             저장
           </Button>

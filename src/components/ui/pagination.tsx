@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const VISIBILITY_PAGE = 5;
+const HALF_VISIBILITY_PAGE = Math.floor(VISIBILITY_PAGE / 2);
 
 interface PaginationProps {
   setPage: (page: number) => void;
@@ -9,10 +10,20 @@ interface PaginationProps {
   totalPage: number;
 }
 
-const Pagination = ({ setPage, page, totalPage }: PaginationProps) => {
-  const pageNumbers = Array.from({ length: VISIBILITY_PAGE }, (_, i) =>
-    page <= Math.floor(VISIBILITY_PAGE / 2) + 1 ? i + 1 : i + page - 1
-  ).filter((pageNumber) => pageNumber <= totalPage);
+const Pagination = ({
+  setPage,
+  page: currentPageNumber,
+  totalPage,
+}: PaginationProps) => {
+  const start = Math.max(1, currentPageNumber - HALF_VISIBILITY_PAGE);
+
+  const endIndex = Math.min(totalPage, start + VISIBILITY_PAGE - 1);
+  const startIndex = Math.max(1, endIndex - VISIBILITY_PAGE + 1);
+
+  const pageNumbers = Array.from(
+    { length: endIndex - startIndex + 1 },
+    (_, i) => i + startIndex
+  );
 
   const handleSetPage = (newPage: number) => {
     if (newPage < 1 || newPage > totalPage) {
@@ -25,8 +36,8 @@ const Pagination = ({ setPage, page, totalPage }: PaginationProps) => {
   return (
     <div className="flex justify-center space-x-2 items-center">
       <Button
-        onClick={() => handleSetPage(page - 1)}
-        disabled={page === 1}
+        onClick={() => handleSetPage(currentPageNumber - 1)}
+        disabled={currentPageNumber === 1}
         variant="link"
       >
         <ArrowLeft size={16} />
@@ -36,14 +47,14 @@ const Pagination = ({ setPage, page, totalPage }: PaginationProps) => {
           key={pageNumber}
           variant="link"
           onClick={() => handleSetPage(pageNumber)}
-          className={pageNumber === page ? "underline" : ""}
+          className={pageNumber === currentPageNumber ? "underline" : ""}
         >
           {pageNumber}
         </Button>
       ))}
       <Button
-        onClick={() => handleSetPage(page + 1)}
-        disabled={page === totalPage}
+        onClick={() => handleSetPage(currentPageNumber + 1)}
+        disabled={currentPageNumber === totalPage}
         variant="link"
       >
         <ArrowRight size={16} />

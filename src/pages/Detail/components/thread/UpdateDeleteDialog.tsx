@@ -14,9 +14,12 @@ const UpdateDeleteDialog = () => {
 
   const navigate = useNavigate();
 
-  const { mutate: deleteThread } = useDeleteThread(Number(threadId), () => {
-    navigate("/");
-  });
+  const { mutate: deleteThread, isPending } = useDeleteThread(
+    Number(threadId),
+    () => {
+      navigate("/");
+    }
+  );
 
   const handleDelete = () => {
     deleteThread();
@@ -38,7 +41,11 @@ const UpdateDeleteDialog = () => {
           <DialogHeader>
             <DialogDescription>정말로 삭제하시겠습니까?</DialogDescription>
           </DialogHeader>
-          <Button onClick={handleDelete} variant="destructive">
+          <Button
+            onClick={handleDelete}
+            variant="destructive"
+            disabled={isPending}
+          >
             확인
           </Button>
         </DialogContent>

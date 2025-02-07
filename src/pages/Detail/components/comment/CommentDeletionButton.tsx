@@ -14,7 +14,7 @@ const CommentDeletionButton = ({ commentId }: CommentDeletionButtonProps) => {
 
   const [open, setOpen] = useState(false);
 
-  const { mutate: deleteComment } = useDeleteComment({
+  const { mutate: deleteComment, isPending } = useDeleteComment({
     threadId: Number(threadId),
     commentId: Number(commentId),
     onSuccess: () => {
@@ -36,7 +36,12 @@ const CommentDeletionButton = ({ commentId }: CommentDeletionButtonProps) => {
       </DialogTrigger>
       <DialogContent>
         정말로 삭제하시겠습니까?
-        <Button size="sm" variant="destructive" onClick={handleDelete}>
+        <Button
+          size="sm"
+          variant="destructive"
+          onClick={handleDelete}
+          disabled={isPending}
+        >
           확인
         </Button>
       </DialogContent>

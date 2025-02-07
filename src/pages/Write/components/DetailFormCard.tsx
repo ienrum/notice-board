@@ -31,8 +31,9 @@ const formSchema = z.object({
 const DetailFormCard = () => {
   const threadId = useParams().id as string;
   const navigate = useNavigate();
-  const { mutate: updateThread } = useUpdateThread(Number(threadId), () =>
-    navigate(`/thread/${threadId}`)
+  const { mutate: updateThread, isPending } = useUpdateThread(
+    Number(threadId),
+    () => navigate(`/thread/${threadId}`)
   );
 
   const {
@@ -92,7 +93,7 @@ const DetailFormCard = () => {
             />
           </CardContent>
 
-          <Button type="submit" className="w-fit">
+          <Button type="submit" className="w-fit" disabled={isPending}>
             수정
           </Button>
         </form>
